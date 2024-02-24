@@ -2,6 +2,9 @@ NEXT_COMPOSE_YML := docker-compose.dev.yml
 NEXT_DC := docker compose -f $(NEXT_COMPOSE_YML)
 NEXT_SERVICE := nextjs-todo-app
 
+SUPABASE_COMPOSE_YML := ./supabase/docker/docker-compose.yml
+SUPABASE_DC := docker compose -f $(SUPABASE_COMPOSE_YML)
+
 next-build:
 	mkdir -p node_modules
 	$(NEXT_DC) build
@@ -30,9 +33,37 @@ next-init:
 	@make next-npm-install
 	@make next-up
 
+supabase-build:
+	cp ./supabase/docker/.env.example ./supabase/docker/.env
+	mkdir -p ./supabase/docker/volumes/db/data/
+	$(SUPABASE_DC) build
+
+supabase-up:
+	$(SUPABASE_DC) up -d
+
+supabase-down:
+	$(SUPABASE_DC) down --remove-orphans
+
+supabase-down-v:
+	$(SUPABASE_DC) down --remove-orphans --volumes
+	sudo rm -rf ./supabase/docker/volumes/db/data/
+
+supabase-restart:
+	$(SUPABASE_DC) restart
+
+supabase-stop:
+	$(SUPABASE_DC) stop
+
+supabase-init:
+	@make supabase-down-v
+	@make supabase-build
+	@make supabase-up
+
 init:
+	@make supabase-init
 	@make next-init
 	@make next-logs
 
 down-v:
+	@make supabase-down-v
 	@make next-down-v
