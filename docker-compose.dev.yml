@@ -10,6 +10,7 @@ services:
       - '6006:6006'
     networks:
       - nextjs-todo-app
+      - supabase_default
     volumes:
       - type: bind
         source: ./
@@ -27,3 +28,5 @@ volumes:
   node_modules:
 networks:
   nextjs-todo-app:
+  supabase_default:
+    external: true
