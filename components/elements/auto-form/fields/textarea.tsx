@@ -1,0 +1,23 @@
+import type { AutoFormInputComponentProps } from '@/components/elements/auto-form/types'
+import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from '@/components/elements/shadcn-ui/form'
+import { Textarea } from '@/components/elements/shadcn-ui/textarea'
+
+export const AutoFormTextarea = ({ label, isRequired, fieldConfigItem, fieldProps }: AutoFormInputComponentProps) => {
+  const { showLabel: _showLabel, ...fieldPropsWithoutShowLabel } = fieldProps
+  const showLabel = _showLabel === undefined ? true : _showLabel
+  return (
+    <FormItem>
+      {showLabel && (
+        <FormLabel>
+          {label}
+          {isRequired && <span className="text-destructive"> *</span>}
+        </FormLabel>
+      )}
+      <FormControl>
+        <Textarea {...fieldPropsWithoutShowLabel} />
+      </FormControl>
+      {fieldConfigItem.description && <FormDescription>{fieldConfigItem.description}</FormDescription>}
+      <FormMessage />
+    </FormItem>
+  )
+}

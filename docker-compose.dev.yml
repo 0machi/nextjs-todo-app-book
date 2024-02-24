@@ -1,0 +1,29 @@
+services:
+  nextjs-todo-app:
+    container_name: nextjs-todo-app
+    hostname: nextjs-todo-app
+    build:
+      context: .
+      dockerfile: ./docker/nextjs/dev.Dockerfile
+    ports:
+      - '3000:3000'
+      - '6006:6006'
+    networks:
+      - nextjs-todo-app
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - type: bind
+        source: ./node_modules
+        target: /app/node_modules
+    environment:
+      - WATCHPACK_POLLING=true
+    command: sh -c "npm run dev"
+    restart: always
+    tty: true
+    stdin_open: true
+volumes:
+  node_modules:
+networks:
+  nextjs-todo-app:
