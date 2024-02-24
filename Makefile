@@ -59,9 +59,13 @@ supabase-init:
 	@make supabase-build
 	@make supabase-up
 
+migrate:
+	$(NEXT_DC) exec $(NEXT_SERVICE) npm run db:push
+
 init:
 	@make supabase-init
 	@make next-init
+	@make migrate
 	@make next-logs
 
 down-v:
