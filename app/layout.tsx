@@ -1,4 +1,3 @@
-import { Toaster } from '@/components/elements/shadcn-ui/toaster'
 import { RootLayout } from '@/components/layouts/root-layout'
 import { getServerAuthSession } from '@/libs/next-auth/auth'
 import type { Metadata } from 'next'
@@ -19,7 +18,6 @@ export default async function Layout(props: { todo: React.ReactNode; login: Reac
       <body className={inter.className}>
         <RootLayout>
           {session ? props.todo : props.login}
-          <Toaster />
         </RootLayout>
       </body>
     </html>
