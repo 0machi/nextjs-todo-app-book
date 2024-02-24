@@ -1,0 +1,15 @@
+node_modules/
+.next/
+build/
+dist/
+out/
+public/
+package-lock.json
+next.config.mjs
+*.Dockerfile
+*compose.*.yml
+*compose.yml
+**/*.md
+supabase/docker/
+drizzle/migrations/
+/storybook-static/
