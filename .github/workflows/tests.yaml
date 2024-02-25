@@ -1,0 +1,33 @@
+name: 'Tests'
+on: pull_request
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: 'read'
+    steps:
+      - uses: actions/checkout@v4
+      - name: create .env
+        run: |
+          touch .env
+          echo NODE_ENV=development >> .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
+          echo LINE_CLIENT_ID=${{ secrets.LINE_CLIENT_ID }} >> .env
+          echo LINE_CLIENT_SECRET=${{ secrets.LINE_CLIENT_SECRET }} >> .env
+          echo CI=true >> .env
+      - name: Init
+        run: |
+          make gha-supabase-init
+          make gha-next-init
+          make migrate
+          make playwright-up
+      - name: Build storybook and run storybook tests
+        run: |
+          make storybook-build
+          make storybook-test
+      - name: E2E tests
+        run: |
+          make e2e-test
