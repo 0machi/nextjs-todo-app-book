@@ -14,7 +14,10 @@
     "fix:prettier": "npm run lint:prettier -- --write",
     "db:gen": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
-    "db:drop": "drizzle-kit drop"
+    "db:drop": "drizzle-kit drop",
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build --quiet",
+    "test:storybook": "test-storybook --url http://127.0.0.1:6006"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.4.0",

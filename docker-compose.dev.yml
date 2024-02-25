@@ -6,8 +6,7 @@ services:
       context: .
       dockerfile: ./docker/nextjs/dev.Dockerfile
     ports:
-      - '3000:3000'
-      - '6006:6006'
+      - 3000:3000
     networks:
       - nextjs-todo-app
       - supabase_default
@@ -24,6 +23,20 @@ services:
     restart: always
     tty: true
     stdin_open: true
+  playwright:
+    build:
+      context: .
+      dockerfile: ./docker/playwright/Dockerfile
+    container_name: playwright
+    ports:
+      - 6006:6006
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - type: bind
+        source: ./node_modules
+        target: /app/node_modules
 volumes:
   node_modules:
 networks:
