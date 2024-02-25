@@ -1,13 +1,12 @@
 'use server'
-import { db } from '@/libs/drizzle/db'
-import { tasks } from '@/libs/drizzle/schema'
+import { insertTask } from '@/libs/drizzle/crud/task'
 import { checkAuthenticatedUser } from '@/libs/next-auth/auth'
-import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
+import type { AddTaskFormData } from '@/features/todo-list/schemas/add-task-form-schema'
 import type { ActionResult } from '@/types/actions/actions'
 
-export const deleteTaskAction = async (id: string): Promise<ActionResult> => {
+export const addTaskAction = async (formData: AddTaskFormData): Promise<ActionResult> => {
   const userId = await checkAuthenticatedUser()
   if (userId === undefined) {
     return {
@@ -17,12 +16,15 @@ export const deleteTaskAction = async (id: string): Promise<ActionResult> => {
   }
 
   try {
-    await db.delete(tasks).where(eq(tasks.id, id))
+    await insertTask({
+      createdById: userId,
+      title: formData.taskTitle,
+    })
   } catch (e) {
     console.error(e)
     return {
       success: false,
-      error: 'Failed to delete task.',
+      error: 'Failed to create task.',
     }
   }
 

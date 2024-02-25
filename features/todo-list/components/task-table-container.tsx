@@ -1,18 +1,19 @@
 import { deleteTaskAction } from '@/features/todo-list/actions/delete-task-action'
 import { updateTaskStatusAction } from '@/features/todo-list/actions/update-task-action'
 import { TaskTable } from '@/features/todo-list/components/task-table'
-import { getServerAuthSession } from '@/libs/next-auth/auth'
-
+import { db } from '@/libs/drizzle/db'
+import { tasks } from '@/libs/drizzle/schema'
+import { checkAuthenticatedUser } from '@/libs/next-auth/auth'
+import { desc, eq } from 'drizzle-orm'
 
 export const TaskTableContainer = async () => {
-  const session = await getServerAuthSession()
-  const userId = session?.user?.id
+  const userId = await checkAuthenticatedUser()
   if (userId === undefined) return <></>
-  // TODO: タスク一覧を取得する
+  const results = await db.select().from(tasks).where(eq(tasks.createdById, userId)).orderBy(desc(tasks.createdAt))
 
   return (
     <div className="container p-12">
-      <TaskTable data={[]} updateTaskStatusAction={updateTaskStatusAction} deleteTaskAction={deleteTaskAction} />
+      <TaskTable data={results} updateTaskStatusAction={updateTaskStatusAction} deleteTaskAction={deleteTaskAction} />
     </div>
   )
 }
