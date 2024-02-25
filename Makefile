@@ -1,6 +1,7 @@
 NEXT_COMPOSE_YML := docker-compose.dev.yml
 NEXT_DC := docker compose -f $(NEXT_COMPOSE_YML)
 NEXT_SERVICE := nextjs-todo-app
+PLAYWRIGHT_SERVICE := playwright
 
 SUPABASE_COMPOSE_YML := ./supabase/docker/docker-compose.yml
 SUPABASE_DC := docker compose -f $(SUPABASE_COMPOSE_YML)
@@ -71,3 +72,19 @@ init:
 down-v:
 	@make supabase-down-v
 	@make next-down-v
+
+playwright-up:
+	$(NEXT_DC) up -d $(PLAYWRIGHT_SERVICE)
+
+storybook:
+	$(NEXT_DC) exec $(PLAYWRIGHT_SERVICE) npm run storybook
+
+storybook-build:
+	mkdir -p storybook-static
+	sudo chown -R 1000:1000 storybook-static
+	$(NEXT_DC) exec $(PLAYWRIGHT_SERVICE) npm run build:storybook
+
+storybook-test:
+	$(NEXT_DC) exec $(PLAYWRIGHT_SERVICE) npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+		"npx http-server storybook-static --port 6006 --silent" \
+		"npx wait-on tcp:127.0.0.1:6006 && npm run test:storybook"
