@@ -6,8 +6,7 @@ services:
       context: .
       dockerfile: ./docker/nextjs/dev.Dockerfile
     ports:
-      - '3000:3000'
-      - '6006:6006'
+      - 3000:3000
     networks:
       - nextjs-todo-app
       - supabase_default
