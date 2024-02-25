@@ -88,3 +88,10 @@ storybook-test:
 	$(NEXT_DC) exec $(PLAYWRIGHT_SERVICE) npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
 		"npx http-server storybook-static --port 6006 --silent" \
 		"npx wait-on tcp:127.0.0.1:6006 && npm run test:storybook"
+
+e2e-test:
+	mkdir -p ./e2e/.auth
+	echo "{}" > ./e2e/.auth/user.json
+	$(NEXT_DC) exec $(PLAYWRIGHT_SERVICE) npx concurrently -k -s first -n "NEXT,TEST" -c "magenta,blue" \
+		"npx next dev -p 3002" \
+		"npx wait-on http://127.0.0.1:3002 && npm run test:e2e"

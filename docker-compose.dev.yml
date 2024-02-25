@@ -30,6 +30,10 @@ services:
     container_name: playwright
     ports:
       - 6006:6006
+      - 9323:9323
+      - 8010:8010
+    networks:
+      - supabase_default
     volumes:
       - type: bind
         source: ./
@@ -37,6 +41,10 @@ services:
       - type: bind
         source: ./node_modules
         target: /app/node_modules
+    environment:
+      - DISPLAY=:10
+    env_file:
+      - .env
 volumes:
   node_modules:
 networks:
