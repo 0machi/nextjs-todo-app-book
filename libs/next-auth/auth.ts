@@ -31,3 +31,9 @@ export const nextAuthOptions: NextAuthOptions = {
 }
 
 export const getServerAuthSession = () => getServerSession(nextAuthOptions)
+
+export const checkAuthenticatedUser = async (): Promise<string | undefined> => {
+  const session = await getServerAuthSession()
+  const userId = session?.user?.id
+  return userId
+}
