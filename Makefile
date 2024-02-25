@@ -95,3 +95,14 @@ e2e-test:
 	$(NEXT_DC) exec $(PLAYWRIGHT_SERVICE) npx concurrently -k -s first -n "NEXT,TEST" -c "magenta,blue" \
 		"npx next dev -p 3002" \
 		"npx wait-on http://127.0.0.1:3002 && npm run test:e2e"
+
+gha-next-init:
+	mkdir -p node_modules
+	sudo chown -R 1000:1000 node_modules package.json package-lock.json
+	$(NEXT_DC) build
+	@make next-npm-install
+	@make next-up
+
+gha-supabase-init:
+	@make supabase-build
+	@make supabase-up
