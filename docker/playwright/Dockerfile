@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:focal
+FROM mcr.microsoft.com/playwright:v1.41.2-focal
 
 RUN apt-get update && apt-get -y install x11vnc websockify novnc
 
