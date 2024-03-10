@@ -1,12 +1,12 @@
 'use client'
 import { useToast } from '@/components/elements/shadcn-ui/use-toast'
+import { useTaskTitle } from '@/features/todo-list/atoms/task-title-atom'
 import { AddTaskForm } from '@/features/todo-list/components/add-task-form'
 import type { AddTaskFormData } from '@/features/todo-list/schemas/add-task-form-schema'
 import { addTaskFormConfig, addTaskFormSchema } from '@/features/todo-list/schemas/add-task-form-schema'
-import { useState } from 'react'
 
 export const AddTaskFormContainer = () => {
-  const [taskTitle, setTaskTitle] = useState('')
+  const { taskTitle, setTaskTitle } = useTaskTitle()
   const { toast } = useToast()
 
   const handleParsedValuesChange = (values: Partial<AddTaskFormData>) => {
